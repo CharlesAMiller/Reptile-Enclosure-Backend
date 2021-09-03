@@ -1,0 +1,128 @@
+openapi: 3.0.3
+info: 
+    title: IoT Reptile Enclosure Project
+    description: This is a proposed API sepcification for the IoT Reptile Enclosure Project built using AWS. 
+    termsOfService: http://example.com/terms/
+    contact:
+      name: Charlie Miller
+      url: http://www.charliemiller.me/contact
+      email: charliea.miller@gmail.com
+    license:
+      name: Apache 2.0
+      url: https://www.apache.org/licenses/LICENSE-2.0.html
+    version: 1.0.1
+paths:
+  /enclosure/{EnclosureID}:
+    put:
+      tags:
+      - "enclosure"
+      summary: "Update an existing enclosure"
+      description: ""
+      operationId: "put-enclosure-data"
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/EnclosureInfo'
+        description: "New information for the "
+        required: true
+      responses:
+        "200":
+          description: "Operation succesfull"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Enclosure not found"
+        "405":
+          description: "Validation exception"
+    get: 
+      summary: "Retrieve information for an existing enclosure"
+      description: ""
+      operationId: "get-enclosure-data"
+      responses:
+        "200":
+          description: "Sucessfully returns information for the given enclosure."
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/EnclosureInfo'
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Enclosure not found"
+    parameters:
+    - in: "path"
+      name: "EnclosureID"
+      description: "The unique id of the enclosure."
+      schema: 
+        type: "integer"
+      required: true
+  /enclosure/{EnclosureID}/data:
+    get:
+      tags: 
+      - "enclosure"
+      summary: "Retrieve sensor "
+      parameters:
+      - in: "query"
+        name: "startTime"
+        description: "The "
+        schema: 
+          type: "string"
+          format: "time"
+      responses: 
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Enclosure not found"
+    parameters:
+    - in: "path"
+      name: "EnclosureID"
+      description: "The unique id of the enclosure."
+      schema: 
+        type: "integer"
+      required: true
+components:
+  schemas:
+    EnclosureStatusRecord:
+      type: "object"
+      properties:
+        CreatedAt:
+        
+    EnclosureInfo:
+      type: "object"
+      required:
+      - "name"
+      - "photoUrls"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        name:
+          type: "string"
+          example: "doggie"
+        photoUrls:
+          type: "array"
+          xml:
+            name: "photoUrl"
+            wrapped: true
+          items:
+            type: "string"
+        status:
+          type: "string"
+          description: "pet status in the store"
+          enum:
+          - "available"
+          - "pending"
+          - "sold"
+      xml:
+        name: "Pet"
+    ApiResponse:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+          format: "int32"
+        type:
+          type: "string"
+        message:
+          type: "string"
